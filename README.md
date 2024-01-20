@@ -1,4 +1,4 @@
-# TCK for GQL (gql-tck)
+# TCK for GQL (github.com/opengql/tck)
 A Language-independent Technology Compatibilty Kit (TCK) for the GQL graph query language. The GQL TCK is derived from the [openCypher TCK](https://opencypher.org/resources/) as the two languages share many language features.
 
 This repository is designed to be included as a submodule from other repositories. Such parent repositories are responsible for
