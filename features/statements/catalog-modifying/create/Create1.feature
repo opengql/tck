@@ -1,58 +1,90 @@
 
 #encoding: utf-8
 
+@GC01
 Feature: Create1 - Creating schemas
 
   Scenario: [1] Create a schema at the root
-    Given any catalog
+    Given an empty catalog
     When executing query:
       """
-      CREATE SCHEMA IF NOT EXISTS /movies
+      CREATE SCHEMA /myschema
       """
     Then the result should be empty
     And the side effects should be:
       | +schemas | 1 |
 
-  Scenario: [2] Create a schema
-    Given any catalog
+  Scenario: [2] Create a schema, in a directory
+    Given an empty catalog
     When executing query:
       """
-      CREATE SCHEMA IF NOT EXISTS /my_schemas/movies
+      CREATE SCHEMA /foo/myschema
       """
     Then the result should be empty
     And the side effects should be:
       | +schemas | 1 |
 
-  Scenario: [3] Do not create a schema that already exists
-    Given the catalog-1 catalog
+  Scenario: [3] Raise error condition creating a schema that already exists
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE SCHEMA /myschema
+      """
     When executing query:
       """
-      CREATE SCHEMA IF NOT EXISTS /my_schemas/movies
+      CREATE SCHEMA /myschema
+      """
+    Then an exception condition should be raised: 42000
+
+  Scenario: [4] Raise error condition creating a schema whose name identifies a directory
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE SCHEMA /foo/myschema
+      """
+    When executing query:
+      """
+      CREATE SCHEMA /foo
+      """
+    Then an exception condition should be raised: 42000
+
+  Scenario: [5] Raise error condition creating a schema whose name identifies a graph
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE GRAPH /foo ANY
+      """
+    When executing query:
+      """
+      CREATE SCHEMA /foo
+      """
+    Then an exception condition should be raised: 42000
+
+  Scenario: [6] Raise error condition creating a schema whose name identifies a graph type
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE GRAPH TYPE /foo {
+        (Person :Person {lastname STRING, firstname STRING,joined DATE})
+      }
+      """
+    When executing query:
+      """
+      CREATE SCHEMA /foo
+      """
+    Then an exception condition should be raised: 42000
+
+  @GC02
+  Scenario: [7] Create a schema, if not exists
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE SCHEMA /foo/myschema
+      """
+    When executing query:
+      """
+      CREATE SCHEMA /foo/myschema
       """
     Then the result should be empty
     And the side effects should be:
       | +schemas | 0 |
-
-  Scenario: [4] Fail when creating a schema that already exists
-    Given the catalog-1 catalog
-    When executing query:
-      """
-      CREATE SCHEMA /my_schemas/movies
-      """
-    Then an exception condition should be raised: 42000
-
-  Scenario: [5] Fail when creating a schema with the same path as an existing directory
-    Given the catalog-1 catalog
-    When executing query:
-      """
-      CREATE SCHEMA /my_schemas
-      """
-    Then an exception condition should be raised: 42000
-
-  Scenario: [5] Fail when creating a schema with the same path as an existing graph
-    Given the catalog-2 catalog
-    When executing query:
-      """
-      CREATE SCHEMA /movies
-      """
-    Then an exception condition should be raised: 42000
