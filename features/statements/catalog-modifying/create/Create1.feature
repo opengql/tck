@@ -88,3 +88,22 @@ Feature: Create1 - Creating schemas
     Then the result should be empty
     And the side effects should be:
       | +schemas | 0 |
+
+  Scenario: [8] Create schema statement fails from read-only transaction
+    Given an empty catalog
+    When executing query:
+      """
+      START TRANSACTION READ ONLY
+        CREATE SCHEMA /foo
+      COMMIT
+      """
+    Then an exception condition should be raised: 25G03
+
+  Scenario: [9] Create schema statement fails, if combined with other statements
+    Given an empty catalog
+    When executing query:
+      """
+      CREATE SCHEMA /foo
+        NEXT CREATE SCHEMA /fee
+      """
+    Then an exception condition should be raised: 42000
