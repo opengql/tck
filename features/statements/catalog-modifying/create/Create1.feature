@@ -52,11 +52,12 @@ Feature: Create1 - Creating schemas
     Given an empty catalog
     And having executed:
       """
-      CREATE GRAPH /foo ANY
+      CREATE SCHEMA /foo
+      CREATE GRAPH /foo/mygraph ANY
       """
     When executing query:
       """
-      CREATE SCHEMA /foo
+      CREATE SCHEMA /foo/mygraph
       """
     Then an exception condition should be raised: 42000
 
@@ -64,13 +65,14 @@ Feature: Create1 - Creating schemas
     Given an empty catalog
     And having executed:
       """
-      CREATE GRAPH TYPE /foo {
+      CREATE SCHEMA /foo
+      CREATE GRAPH TYPE /foo/mygraphtype {
         (Person :Person {lastname STRING, firstname STRING,joined DATE})
       }
       """
     When executing query:
       """
-      CREATE SCHEMA /foo
+      CREATE SCHEMA /foo/mygraphtype
       """
     Then an exception condition should be raised: 42000
 
