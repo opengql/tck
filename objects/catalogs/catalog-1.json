@@ -1,1 +1,19 @@
-{}
+{
+    "name": "",
+    "objects": [
+        {
+            "type": "schema",
+            "name": "myschema"
+        },
+        {
+            "type": "directory",
+            "name": "foo",
+            "objects": [
+                {
+                    "type": "schema",
+                    "name": "myschema"
+                }
+            ]
+        }
+    ]
+}
