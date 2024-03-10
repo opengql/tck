@@ -335,7 +335,7 @@ Todo
 
 Todo
 
-## TCK scenario steps
+## Supported scenario steps
 
 A Cucumber scenario consists of one or more steps. The steps begin with a keyword, and
 are customized for each TCK. The following steps are defined and used by the TCK for GQL.
