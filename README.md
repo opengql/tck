@@ -335,6 +335,39 @@ Todo
 
 Todo
 
+## TCK scenario steps
+
+A Cucumber scenario consists of one or more steps. The steps begin with a keyword, and
+are customized for each TCK. The following steps are defined and used by the TCK for GQL.
+
+This is a work in progress!
+
+**Given** an empty catalog
+
+**Given** any catalog
+
+**Given** the _catalog-name_ catalog
+
+**Given** an empty graph
+
+**Given** any graph
+
+**And** after having executed: _query_
+
+**When** executing query: _query_
+
+**Then** the result should be empty
+
+**And** the side effects should be: _table of metrics_
+
+**Then** an exception condition should be raised: _GQLSTATUS_
+
+**And** these graphs should have equivalent graph types: _table of graph references_
+
+**And** these graphs should be equivalent: _table of graph references_
+
+**And** these graphs and their types should be equivalent: _table of graph references_
+
 ## Side effects of executing a query
 
 A GQL query that contains write clauses may have side effects that are persisted in

@@ -133,7 +133,7 @@ Feature: Create1 - Creating graphs
       CREATE GRAPH ANY AS COPY OF mysrcgraph
       """
     Then the result should be empty
-    And these graphs should contain equivalent:
+    And these graphs and their types should be equivalent:
       | mysrcgraph | mygraph |
     And the side effects should be:
       | +graphs | 1 |
