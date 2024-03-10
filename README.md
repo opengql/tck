@@ -329,13 +329,17 @@ to other features, such a `<value expressions>`.
 
 ## Principals and authorization
 
-Todo
+Since both Principals and their Privileges are implementation defined, there is little
+conformance validation that can be done in the TCK regarding them.
 
-## Focused, and ambient statements
+The TCK assumes that the TCK scaffolding executes all GQL-programs with a principal that
+has "super-user" privileges. Essentially no GQL-program executed by any scenario should
+fail for lack of privileges.
 
-Todo
+Certain steps provide the ability to set the _home schema_ or the _home graph_. Thus, the TCK
+also assumes that the same principal is used for the duration of a scenario.
 
-## Targeting HOME_GRAPH and CURRENT_GRAPH
+## Transactions and Sessions
 
 Todo
 
@@ -352,11 +356,21 @@ This is a work in progress!
 
 **Given** the \<catalog name\> catalog
 
+**Given** an omitted graph
+
+Sets the home graph of the scenario principal to _omitted_.
+
 **Given** an empty graph
+
+Sets the home graph of the scenario principal to a reference to an empty graph.
 
 **Given** any graph
 
+Sets the home graph of the scenario principal to a reference to any graph.
+
 **Given** the \<graph name\> graph
+
+Sets the home graph of the scenario principal to a reference to a graph created from \<graph name\>.
 
 **And** after having executed: \<query\>
 
