@@ -272,7 +272,7 @@ dropped. e.g. The TCK always uses GRAPH, never PROPERTY GRAPH.
 ## Scenario design
 
 Each scenario is independent, which implies that a scenario never relies on the result or
-side effects of a previous scenario. Independent scenarios follow the Cucumber guideslines
+side effects of a previous scenario. Independent scenarios follow the Cucumber guidelines
 ([Sharing state between scenarios](https://cucumber.io/docs/cucumber/state/?lang=java)) and allow
 for concurrent execution of scenarios.
 
