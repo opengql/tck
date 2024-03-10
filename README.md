@@ -38,13 +38,14 @@ Both contributors and consumers of the TCK need to understand the goals and limi
 of the TCK. This document describes the principles used in the development of TCK Features
 and Scenarios. It describes what the TCK is, and what it is not.
 
+### Goals and limitations
 Testing a production database is a monumental task. It requires a variety of testing
 strategies, including but not limited to: unit testing, smoke testing, integration testing,
 longevity testing, performance testing, end-to-end testing, disaster-recovery testing etc.
 The TCK is not designed or intended to address most of these testing needs.
 
 The primary purpose and goal of the TCK for GQL is to functionally validate that a GQL
-Implementation adheres to the GQL Specification. This is an important, but limited aspect
+Implementation conforms to the GQL Specification. This is an important, but limited aspect
 of the overall testing strategy for a production grade GQL Implementation.
 
 This narrowly scoped purpose and goal has implications on how the TCK Features and
@@ -74,10 +75,10 @@ This enables the execution of scenarios for a subset of the language. e.g. execu
 all catalog-modifying statement scenarios, or execute all graph creation statement
 scenarios.
 
-Some aspects of the GQL Language are cross-cutting. For example <value expressions>.
+Some aspects of the GQL Language are cross-cutting. For example `<value expressions>`.
 The directory structure also reflects the large cross-cutting aspects of the language.
 As a result, consumers can execute scenarios focused on one of these cross-cutting
-features. e.g. execute all _graph expression_ scenarios or execute all _value expression_
+features. e.g. execute all `<graph expression>` scenarios or execute all `<value expression>`
 scenarios.
 
 This overall directory structure follows the general pattern of the
@@ -139,10 +140,9 @@ to provide this capability.
 
 Each optional GQL feature is assigned a four character Feature ID in the Specification.
 These Feature IDs are used to tag Features and/or Scenarios to indicate that a given Feature
-and/or Scenario validates conformance to the corresponding feature.
+and/or Scenario validates conformance to the corresponding GQL feature.
 
-Note that when a Gherkin Feature is tagged, each Scenario in the Feature is tagged with
-that same tag.
+Note that when a Gherkin Feature is tagged, each Scenario in the Feature inherits that tag.
 
 The following feature and its scenarios for the CREATE GRAPH statement illustrate how
 tags are used in the TCK to validate optional features. The body of each scenario has
@@ -176,17 +176,18 @@ Feature: Create1 - Creating graphs
 ```
 The feature is tagged with _GC04 - Graph Management_ because all the scenarios in this
 feature validate various forms of the CREATE GRAPH statement, which is part of the
-optional Graph Management feature. The scenarios in this feature should only be run
+optional _Graph Management_ feature. The scenarios in this feature should only be run
 against GQL Implementation claiming support for this optional feature.
 
 _Scenario 1, Create an open graph_, validates the creation of a graph with an open graph
 type. Creating a graph with an open graph type is another optional feature (_GG01 -
-Graph with an open graph type_). Therefore, this scenario is tagged with GG01.
+Graph with an open graph type_). Therefore, this scenario is tagged with GG01, and
+inherits GC04 from its parent Feature.
 
 _Scenario 3, Create a closed graph from an inline graph type specification_, is tagged
 with two tags. _GG02 - Graph with a closed graph type_, and _GG03 - Graph type inline
-specification_, because it validates a statement that depends on two optional features,
-in addition to the Graph Management feature.
+specification_, because it validates a statement that depends on two optional features.
+It also inherits GC04 from its parent Feature.
 
 According to the GQL Specification, a feature FEAT1 may imply another feature FEAT2.
 This means that if a GQL Implementation claims support for feature FEAT1, it shall also
@@ -196,9 +197,9 @@ GG01 - Create open graph type, implies GC04 - Graph Management. Thus, the scenar
 tagged with both Feature IDs. Note: GC04 is "inherited" from the TCK Feature tag.
 
 When executing scenarios a [_tag expression_](https://cucumber.io/docs/cucumber/api/?lang=java#tag-expressions)
-can be given to Cucumber runtime, that specifies the subset of scenarios that should be executed. The
-following tag expression will execute only scenarios that validate the Graph Management optional
-feature.
+can be given to Cucumber runtime, that specifies the subset of scenarios that should be executed.
+Tag expressions are boolean logic expressions. The following tag expression will execute
+only scenarios that validate the _Graph Management_ optional feature.
 ```
 @GC04
 ```
@@ -208,7 +209,7 @@ open graph types, but not close graph types this will result in unexpected scena
 failure, because both subsets of scenarios will be executed.
 
 The following illustrates a better tag expression because it adheres to the feature
-dependencies define by the GQL Specification.
+dependencies defined by the GQL Specification.
 ```
 @GC04 and @GG01
 ```
@@ -227,10 +228,10 @@ data types: character strings, boolean, signed regular integers, and floats.
 The TCK addresses this using two mechanisms. First, there is a large set of scenarios
 tagged with @core. These scenarios validate minimum conformance for things such as
 the basic data model, syntax not associated with an optional feature, Unicode Standard,
-minimum data types. All scenarios, not tagged with an option feature tag, are tagged
-with the @core tag.
+minimum data types, expressions on those types, etc. All scenarios, not tagged with an
+option feature tag, are tagged with the @core tag.
 
-Second, when executing TCK scenarios, consumers must combine the core
+Second, when executing TCK scenarios, consumers must combine the _core_
 tag with either the tag for Graph with open graph type, or the tag for 
 Graph with closed graph type. And if it is the latter, with at least one of GG20,
 GG21, GG22 or GG23. See the specification for details.
@@ -277,9 +278,10 @@ for concurrent execution of scenarios.
 Scenarios are small and focused, validating the smallest possible aspect of the
 GQL Specification.
 
-Real world graphs and graph types are generally not used by the TCK. Contrived graphs
-and graph types are used to focus on a single feature of the GQL Language. For example,
-a graph type with no property constraints is adequate to verify label set constraints.
+With some exceptions, real world graphs and graph types are not used by the TCK.
+Contrived graphs and graph types are used to focus on a single feature of the
+GQL Language. For example, a graph type with no property constraints is adequate
+to verify label set constraints.
 
 ### Combinatorial feature validation
 
@@ -299,8 +301,8 @@ there is a set of scenarios for validating graph expressions. These scenarios wi
 one use case of graph scenarios and have a scenario for each graph expression form with
 that use case.
 
-Create graph statement, and Session set command are two features the use graph expressions.
-There's six others. The scenarios for Create graph statement and Session set command each
+For example, _create graph statement_, and _session set command_ are two features that
+use graph expressions. The scenarios for create graph statement and session set command each
 contain a single scenario, that uses one form of a graph expression.
 
 ```
@@ -318,15 +320,17 @@ CREATE GRAPH mygraph LIKE /othergraph                   # like catalog ref
 CREATE GRAPH mygraph LIKE CURRENT_GRAPH                 # like current graph
 ```
 In reality there are more variants because the first scenario has some additional variants.
+See `11.3 <object expression primary>`.
 
 This approach reduces the number of scenarios from 32 to 12. This might not seem like
-a significant reduction but graph expressions combine in a limited manner with other features.
+a significant reduction but graph expressions combine in a limited manner compared
+to other features, such a `<value expressions>`.
 
 ## Principals and authorization
 
 Todo
 
-## Focused, and ambient graph referals
+## Focused, and ambient statements
 
 Todo
 
