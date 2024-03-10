@@ -350,29 +350,31 @@ This is a work in progress!
 
 **Given** any catalog
 
-**Given** the _catalog-name_ catalog
+**Given** the \<catalog name\> catalog
 
 **Given** an empty graph
 
 **Given** any graph
 
-**And** after having executed: _query_
+**Given** the \<graph name\> graph
 
-**When** executing query: _query_
+**And** after having executed: \<query\>
+
+**When** executing query: \<query\>
 
 **Then** the result should be empty
 
-**Then** the result should be, in any order: _table of results_
+**Then** the result should be, in any order: \<table of results\>
 
-**And** the side effects should be: _table of metrics_
+**And** the side effects should be: \<table of metrics\>
 
-**Then** an exception condition should be raised: _GQLSTATUS_
+**Then** an exception condition should be raised: \<GQLSTATUS\>
 
-**And** these graphs should have equivalent graph types: _table of graph references_
+**And** these graphs should have equivalent graph types: \<table of graph references\>
 
-**And** these graphs should be equivalent: _table of graph references_
+**And** these graphs should be equivalent: \<table of graph references\>
 
-**And** these graphs and their types should be equivalent: _table of graph references_
+**And** these graphs and their types should be equivalent: \<table of graph references\>
 
 ## Side effects of executing a query
 
