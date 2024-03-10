@@ -358,6 +358,8 @@ This is a work in progress!
 
 **Then** the result should be empty
 
+**Then** the result should be, in any order: _table of results_
+
 **And** the side effects should be: _table of metrics_
 
 **Then** an exception condition should be raised: _GQLSTATUS_
