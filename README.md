@@ -138,6 +138,8 @@ The following illustrates a better tag expression because it adheres to the feat
 When executing scenarios from the TCK, it is up to the consumers of the TCK, to construct tag expressions that reflect the feature dependencies defined by the GQL Specification.
 
 #### Minimum conformance
+_Note: The mechanism for validating minimum conformance needs reworking. Open graph type and close graph type wind their way through almost every aspect of GQL. e.g. expressions can't be validated without separate scenarios for open and closed graph types, at least so far as we've figured. We're still working on way to validate expressions without having duplicate tests for open and closed graph types._
+
 Minimum conformance is defined by 24.2 Minimum conformance, in the GQL Specification. An abbreviated conformance statement is that an implementation meets minimum conformance if it supports the basic property graph data model defined by the specification, all syntax, not associated with an optional feature, one of Graph with open graph type, or Graph with closed graph type, conformance to the Unicode Standard, and support for the following data types: character strings, boolean, signed regular integers, and floats.
 
 The TCK addresses this using two mechanisms. First, there is a large set of scenarios tagged with @core. These scenarios validate minimum conformance for things such as the basic data model, syntax not associated with an optional feature, Unicode Standard, minimum data types, expressions on those types, etc. All scenarios, not tagged with an option feature tag, are tagged with the @core tag.
