@@ -146,7 +146,10 @@ _One possible way to address this is to use [Scenario Outlines](https://cucumber
 Feature: Test1 - Integer expressions
 
   Scenario Outline: [1] Greater than expression
-    Given the <graph> graph
+    Given the graph created using:
+      """
+      <query>
+      """
     And having executed:
       """
       INSERT (p:Person { age: 30 })
@@ -160,13 +163,13 @@ Feature: Test1 - Integer expressions
 
     @GG01
     Scenarios: Graph with open graph type
-      | graph |
-      | open-expr-graph |
+      | query |
+      | CREATE GRAPH test ANY |
 
     @GG02
     Scenarios: Graph with closed graph type
-      | graph |
-      | closed-expr-graph |
+      | query |
+      | CREATE GRAPH test {(Person :Person {age INT})} |
 ```
 _Cucumber uses the outline for Scenarios data according to the tags. In this example closed-expr-graph is an empty graph with a graph type that allows the integer expressions to be validated without raising a type error._
 
