@@ -342,7 +342,7 @@ Observability of the _directories_ metric:
 GQL does not currently provide a query for discovering the number of directories. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of directories.
 
 ```
-USE /system/catalog MATCH (s:Directory) RETURN COUNT(n)
+USE /system/catalog MATCH (d:Directory) RETURN COUNT(d)
 ```
 
 #### graphs
@@ -351,7 +351,7 @@ Observability of the _graphs_ metric:
 GQL does not currently provide a query for discovering the number of graphs. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of graphs.
 
 ```
-USE /system/catalog MATCH (s:Graph) RETURN COUNT(n)
+USE /system/catalog MATCH (g:Graph) RETURN COUNT(g)
 ```
 
 #### graph-types
@@ -360,7 +360,7 @@ Observability of the _graph-types_ metric:
 GQL does not currently provide a query for discovering the number of graph types. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of graph types.
 
 ```
-USE /system/catalog MATCH (s:GraphType) RETURN COUNT(n)
+USE /system/catalog MATCH (gt:GraphType) RETURN COUNT(gt)
 ```
 
 #### nodes
