@@ -138,15 +138,69 @@ The following illustrates a better tag expression because it adheres to the feat
 When executing scenarios from the TCK, it is up to the consumers of the TCK, to construct tag expressions that reflect the feature dependencies defined by the GQL Specification.
 
 #### Minimum conformance
-_Note: The mechanism for validating minimum conformance needs reworking. Open graph type and close graph type wind their way through almost every aspect of GQL. e.g. expressions can't be validated without separate scenarios for open and closed graph types, at least so far as we've figured. We're still working on way to validate expressions without having duplicate tests for open and closed graph types._
 
-_One possible way to address this is to use [Scenario Outlines](https://cucumber.io/docs/gherkin/reference/#scenario-outline) as shown in the following example._
+Minimum conformance is defined by 24.2 Minimum conformance, in the GQL Specification. An abbreviated conformance statement is that an implementation meets minimum conformance if it supports the basic property graph data model defined by the specification, all syntax, not associated with an optional feature, one of Graph with open graph type, or Graph with closed graph type, conformance to the Unicode Standard, and support for the following data types: character strings, boolean, signed regular integers, and floats.
+
+Question: Is there any minimum conformance that can be verified completely independent of graph type?
+
+What about conformance to Unicode Standard executing queries similar to the following.
 
 ```
-Feature: Test1 - Integer expressions
+    MATCH (n) RETURN "some unicode string" LIMIT 1
+```
 
+A large portion of the GQL Language is not directly effected by graph typing, yet creating a query to validate compatibility independent of graph type is impossible for graphs with closed graph types. Consider the following example for verifying numeric comparison expressions.
+
+```
+  Scenario: [1] Greater than expression
+    Given any graph
+    And having executed:
+      """
+      INSERT (p:Person { age: 30 })
+      """
+    When executing query:
+      """
+      MATCH (p:Person) WHERE p.age > 20 RETURN COUNT(p)
+      """
+    Then the result should be, in any order:
+      | 1 |
+```
+
+This scenario will correctly validate compatibility for graphs with open graph type. For graphs with closed graph type, this scenario will work correctly only if labels, properties and property types used in the queries are compatible with the graph type of the graph.
+
+The following scenario will accurately validate the same behavior on graphs with closed graph type.
+
+```
+  Scenario: [1] Greater than expression
+    Given the graph created by executing:
+      """
+      CREATE GRAPH test {(Person :Person {age INT})}
+      """
+    And having executed:
+      """
+      INSERT (p:Person { age: 30 })
+      """
+    When executing query:
+      """
+      MATCH (p:Person) WHERE p.age > 20 RETURN COUNT(p)
+      """
+    Then the result should be, in any order:
+      | 1 |
+```
+
+According to the GQL Specification minimum conformance requires only that a GQL Implementation support open graph types or closed graph types. It does not have to support both. As a result, without a strategy for expressing compatibility scenarios in a graph type independent way, much of the TCK would have to be duplicated, once for open graph types and again for closed graph types.
+
+The strategy used in the TCK leverages a Cucumber feature called [Scenario Outline](https://cucumber.io/docs/gherkin/reference/#scenario-outline). Scenario Outlines provide the capability of parameterizing steps in a scenario and then executing the Scenario Outline one or more times, with different arguments. Arguments are provided to a Scenario Outline by specifying _Scenarios_, as part of the Scenario Outline. Scenarios is a data element where the data is a table. Columns in the table each represent a different argument value for a parameter. The column head is the name of the parameter. The rows in the table represent the argument values, for each parameter, for each time the Scenario Outline should be instantiated and run as a Scenario.
+
+A Scenario Outline can contain more than one Scenarios element. Each Scenarios element can be tagged. Only those Scenarios matching the tag expression will be run through the Scenario Outline.
+
+The TCK uses the step "Given the graph created by executing:", where the query to create the graph is a Scenario Outline parameter. The argument value can then be either a query that creates a graph with an open type, or a query that creates a graph with a closed type. Each Scenario Outline contains two Scenarioes elements, one tagged with @GG01, that creates a graph with an open type and tagged with @GG02, that creates a graph with a closed type. The closed type graph has a type definition appropriate for the feature being validated. 
+
+The following example illustrates this, by converting the previous example to a Scenario Outline.
+
+```
   Scenario Outline: [1] Greater than expression
-    Given the graph created using:
+    Given the graph created by executing:
       """
       <query>
       """
@@ -171,27 +225,8 @@ Feature: Test1 - Integer expressions
       | query |
       | CREATE GRAPH test {(Person :Person {age INT})} |
 ```
-_Cucumber uses the outline for Scenarios data according to the tags. In this example closed-expr-graph is an empty graph with a graph type that allows the integer expressions to be validated without raising a type error._
 
-Minimum conformance is defined by 24.2 Minimum conformance, in the GQL Specification. An abbreviated conformance statement is that an implementation meets minimum conformance if it supports the basic property graph data model defined by the specification, all syntax, not associated with an optional feature, one of Graph with open graph type, or Graph with closed graph type, conformance to the Unicode Standard, and support for the following data types: character strings, boolean, signed regular integers, and floats.
-
-The TCK addresses this using two mechanisms. First, there is a large set of scenarios tagged with @core. These scenarios validate minimum conformance for things such as the basic data model, syntax not associated with an optional feature, Unicode Standard, minimum data types, expressions on those types, etc. All scenarios, not tagged with an option feature tag, are tagged with the @core tag.
-
-Second, when executing TCK scenarios, consumers must combine the _core_tag with either the tag for Graph with open graph type, or the tag for Graph with closed graph type. And if it is the latter, with at least one of GG20, GG21, GG22 or GG23. See the specification for details.
-
-For example the following tag expression can be used to execute the subset of scenarios for validating a GQL Implementation with minimum conformance, that supports Graph with open graph type.
-
-```
-@core or @GG01
-```
-
-The following tag expression can be used to execute the subset of scenarios for validating a GQL Implementation with minimum conformance, that supports Graph with closed graph type and _Explicit element types_.
-
-```
-@core or (@GG02 and @GG20)
-```
-
-TCK consumers can of course combine tag expressions with executing partial scenario execution based on the directory structure of the TCK. In fact, they must use tag expressions to get expected results.
+Such a strategy does not obviate the need for scenarios that directly deal with verifying closed graph type features, but applies only to scenarios that are not directly involved with graph types, as the previous example illustrates.
 
 #### Negative conformance
 
