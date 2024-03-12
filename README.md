@@ -313,6 +313,8 @@ Sets the home graph of the scenario principal to a reference to any graph.
 
 Sets the home graph of the scenario principal to a reference to a graph created from \<graph name\>.
 
+**Given** the graph created by executing: \<query\>
+
 **And** after having executed: \<query\>
 
 **When** executing query: \<query\>
