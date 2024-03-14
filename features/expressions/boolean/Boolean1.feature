@@ -1,0 +1,353 @@
+#
+# Copyright (c) 2015-2023 "Neo Technology,"
+# Network Engine for Objects in Lund AB [http://neotechnology.com]
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Attribution Notice under the terms of the Apache License 2.0
+#
+# This work was created by the collective efforts of the openCypher community.
+# Without limiting the terms of Section 6, any Derivative Work that is not
+# approved by the public consensus process of the openCypher Implementers Group
+# should not be described as “Cypher” (and Cypher® is a registered trademark of
+# Neo4j Inc.) or as "openCypher". Extensions by implementers or prototypes or
+# proposals for change that have been documented or implemented should only be
+# described as "implementation extensions to Cypher" or as "proposed changes to
+# Cypher that are not yet approved by the openCypher community".
+#
+
+#encoding: utf-8
+
+Feature: Boolean1 - And logical operations
+
+  Scenario Outline: [1] Conjunction of two truth values
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      RETURN true AND true AS tt,
+             true AND false AS tf,
+             true AND null AS tn,
+             false AND true AS ft,
+             false AND false AS ff,
+             false AND null AS fn,
+             null AND true AS nt,
+             null AND false AS nf,
+             null AND null AS nn
+      """
+    Then the result should be, in any order:
+      | tt   | tf    | tn   | ft    | ff    | fn    | nt   | nf    | nn   |
+      | true | false | null | false | false | false | null | false | null |
+    And no side effects
+
+    @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+    @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [2] Conjunction of three truth values
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      RETURN true AND true AND true AS ttt,
+             true AND true AND false AS ttf,
+             true AND true AND null AS ttn,
+             true AND false AND true AS tft,
+             true AND false AND false AS tff,
+             true AND false AND null AS tfn,
+             true AND null AND true AS tnt,
+             true AND null AND false AS tnf,
+             true AND null AND null AS tnn,
+             false AND true AND true AS ftt,
+             false AND true AND false AS ftf,
+             false AND true AND null AS ftn,
+             false AND false AND true AS fft,
+             false AND false AND false AS fff,
+             false AND false AND null AS ffn,
+             false AND null AND true AS fnt,
+             false AND null AND false AS fnf,
+             false AND null AND null AS fnn,
+             null AND true AND true AS ntt,
+             null AND true AND false AS ntf,
+             null AND true AND null AS ntn,
+             null AND false AND true AS nft,
+             null AND false AND false AS nff,
+             null AND false AND null AS nfn,
+             null AND null AND true AS nnt,
+             null AND null AND false AS nnf,
+             null AND null AND null AS nnn
+      """
+    Then the result should be, in any order:
+      | ttt  | ttf   | ttn  | tft   | tff   | tfn   | tnt  | tnf   | tnn  | ftt   | ftf   | ftn   | fft   | fff   | ffn   | fnt   | fnf   | fnn   | ntt  | ntf   | ntn  | nft   | nff   | nfn   | nnt  | nnf   | nnn  |
+      | true | false | null | false | false | false | null | false | null | false | false | false | false | false | false | false | false | false | null | false | null | false | false | false | null | false | null |
+    And no side effects
+
+    @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+    @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [3] Conjunction of many truth values
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      RETURN true AND true AND true AND true AND true AND true AND true AND true AND true AND true AND true AS t,
+             true AND true AND true AND false AND true AND true AND true AND true AND true AND true AND true AS tsf,
+             true AND true AND true AND null AND true AND true AND true AND true AND true AND true AND true AS tsn,
+             false AND false AND false AND false AND false AND false AND false AND false AND false AND false AND false AS f,
+             false AND false AND false AND false AND true AND false AND false AND false AND false AND false AND false AS fst,
+             false AND false AND false AND false AND false AND false AND null AND false AND false AND false AND false AS fsn,
+             null AND null AND null AND null AND null AND null AND null AND null AND null AND null AND null AS n,
+             null AND null AND null AND null AND true AND null AND null AND null AND null AND null AND null AS nst,
+             null AND null AND null AND null AND false AND null AND null AND null AND null AND null AND null AS nsf,
+             true AND false AND false AND false AND true AND false AND false AND true AND true AND true AND false AS m1,
+             true AND true AND false AND false AND true AND false AND false AND true AND true AND true AND false AS m2,
+             true AND true AND false AND false AND true AND null AND false AND true AND true AND null AND false AS m3
+      """
+    Then the result should be, in any order:
+      | t    | tsf   | tsn  | f     | fst   | fsn   | n    | nst  | nsf   | m1    | m2    | m3    |
+      | true | false | null | false | false | false | null | null | false | false | false | false |
+    And no side effects
+
+    @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+    @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [4] Conjunction is commutative on non-null
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      FOR a IN [true, false]
+      FOR b IN [true, false]
+      RETURN a, b, (a AND b) = (b AND a) AS result
+      """
+    Then the result should be, in any order:
+      | a     | b     | result |
+      | true  | true  | true   |
+      | true  | false | true   |
+      | false | true  | true   |
+      | false | false | true   |
+    And no side effects
+
+    @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+    @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [5] Conjunction is commutative on null
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      FOR a IN [true, false, null]
+      FOR b IN [true, false, null]
+      FILTER WHERE a IS NULL OR b IS NULL
+      RETURN a, b, ((a AND b) IS null) = ((b AND a) IS NULL) AS result
+      """
+    Then the result should be, in any order:
+      | a     | b     | result |
+      | true  | null  | true   |
+      | false | null  | true   |
+      | null  | true  | true   |
+      | null  | false | true   |
+      | null  | null  | true   |
+    And no side effects
+
+  @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+  @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [6] Conjunction is associative on non-null
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      FOR a IN [true, false]
+      FOR b IN [true, false]
+      FOR c IN [true, false]
+      RETURN a, b, c, (a AND (b AND c)) = ((a AND b) AND c) AS result
+      """
+    Then the result should be, in any order:
+      | a     | b     | c     | result |
+      | true  | true  | true  | true   |
+      | true  | true  | false | true   |
+      | true  | false | true  | true   |
+      | true  | false | false | true   |
+      | false | true  | true  | true   |
+      | false | true  | false | true   |
+      | false | false | true  | true   |
+      | false | false | false | true   |
+    And no side effects
+
+    @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+    @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [7] Conjunction is associative on null
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      FOR a IN [true, false, null]
+      FOR b IN [true, false, null]
+      FOR c IN [true, false, null]
+      FILTER WHERE a IS NULL OR b IS NULL OR c IS NULL
+      RETURN a, b, c, (a AND (b AND c)) IS NULL = ((a AND b) AND c) IS NULL AS result
+      """
+    Then the result should be, in any order:
+      | a     | b     | c     | result |
+      | true  | true  | null  | true   |
+      | true  | false | null  | true   |
+      | true  | null  | true  | true   |
+      | true  | null  | false | true   |
+      | true  | null  | null  | true   |
+      | false | true  | null  | true   |
+      | false | false | null  | true   |
+      | false | null  | true  | true   |
+      | false | null  | false | true   |
+      | false | null  | null  | true   |
+      | null  | true  | true  | true   |
+      | null  | true  | false | true   |
+      | null  | true  | null  | true   |
+      | null  | false | true  | true   |
+      | null  | false | false | true   |
+      | null  | false | null  | true   |
+      | null  | null  | true  | true   |
+      | null  | null  | false | true   |
+      | null  | null  | null  | true   |
+    And no side effects
+
+    @GG01
+    Examples: Graph with open graph type
+      | query |
+      | CREATE GRAPH test ANY |
+
+    @GG02
+    Examples: Graph with closed graph type
+      | query |
+      | CREATE GRAPH test {()} |
+
+  Scenario Outline: [8] Fail on conjunction of at least one non-booleans
+    Given the graph created using:
+      """
+      <query>
+      """
+    When executing query:
+      """
+      RETURN <a> AND <b>
+      """
+    Then Then an exception condition should be raised: 42000
+
+    @GG01
+    Examples:
+      | query | a       | b       |
+      | CREATE GRAPH test ANY | 123     | true    |
+      | CREATE GRAPH test ANY | 123.4   | false   |
+      | CREATE GRAPH test ANY | 123.4   | null    |
+      | CREATE GRAPH test ANY | 'foo'   | true    |
+      | CREATE GRAPH test ANY | []      | false   |
+      | CREATE GRAPH test ANY | [true]  | false   |
+      | CREATE GRAPH test ANY | [null]  | null    |
+      | CREATE GRAPH test ANY | {}      | true    |
+      | CREATE GRAPH test ANY | {x: []} | true    |
+      | CREATE GRAPH test ANY | false   | 123     |
+      | CREATE GRAPH test ANY | true    | 123.4   |
+      | CREATE GRAPH test ANY | false   | 'foo'   |
+      | CREATE GRAPH test ANY | null    | 'foo'   |
+      | CREATE GRAPH test ANY | true    | []      |
+      | CREATE GRAPH test ANY | true    | [false] |
+      | CREATE GRAPH test ANY | null    | [null]  |
+      | CREATE GRAPH test ANY | false   | {}      |
+      | CREATE GRAPH test ANY | false   | {x: []} |
+      | CREATE GRAPH test ANY | 123     | 'foo'   |
+      | CREATE GRAPH test ANY | 123.4   | 123.4   |
+      | CREATE GRAPH test ANY | 'foo'   | {x: []} |
+      | CREATE GRAPH test ANY | [true]  | [true]  |
+      | CREATE GRAPH test ANY | {x: []} | [123]   |
+
+    @GG02
+    Examples:
+      | query | a       | b       |
+      | CREATE GRAPH test {()} | 123     | true    |
+      | CREATE GRAPH test {()} | 123.4   | false   |
+      | CREATE GRAPH test {()} | 123.4   | null    |
+      | CREATE GRAPH test {()} | 'foo'   | true    |
+      | CREATE GRAPH test {()} | []      | false   |
+      | CREATE GRAPH test {()} | [true]  | false   |
+      | CREATE GRAPH test {()} | [null]  | null    |
+      | CREATE GRAPH test {()} | {}      | true    |
+      | CREATE GRAPH test {()} | {x: []} | true    |
+      | CREATE GRAPH test {()} | false   | 123     |
+      | CREATE GRAPH test {()} | true    | 123.4   |
+      | CREATE GRAPH test {()} | false   | 'foo'   |
+      | CREATE GRAPH test {()} | null    | 'foo'   |
+      | CREATE GRAPH test {()} | true    | []      |
+      | CREATE GRAPH test {()} | true    | [false] |
+      | CREATE GRAPH test {()} | null    | [null]  |
+      | CREATE GRAPH test {()} | false   | {}      |
+      | CREATE GRAPH test {()} | false   | {x: []} |
+      | CREATE GRAPH test {()} | 123     | 'foo'   |
+      | CREATE GRAPH test {()} | 123.4   | 123.4   |
+      | CREATE GRAPH test {()} | 'foo'   | {x: []} |
+      | CREATE GRAPH test {()} | [true]  | [true]  |
+      | CREATE GRAPH test {()} | {x: []} | [123]   |
