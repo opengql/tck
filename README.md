@@ -40,13 +40,28 @@ The TCK Runtime provides an implementation-dependent mechanism for executing TCK
 
 ## Organization
 
-Cucumber provides two organizing mechanisms. First, Features and Scenarios can be organized into directories and files. Second, a Feature and/or Scenario can be tagged with one or more tags.
+At the top level, the TCK contains Cucumber features and scenarios and sample data used by the scenarios. All features and scenarios are organized under the directory _features_.
 
-Both mechanisms provide the bases for executing a subset of the scenarios in a TCK, along different axes.
+### Sample data
+Sample data is organized under the directory _data_. Sample data can consist of catalogs, graphs and graph-types. The following diagram illustrates this organization.
+```
+└── tck
+    ├── features
+    └── data
+        ├── catalogs
+        │   ├── catalog-1.gql
+        │   └── catalog-2.gql
+        ├── graph-types
+        │   └── graph-type-1.gql
+        └── graphs
+            ├── graph-1.gql
+            ├── graph-2.gql
+            └── graph-3.gql
+```
 
-### Directories and files
+### Features and scenarios
 
-TCK Features and Scenarios are organized into multiple files. These files in turn are organized into a directory hierarchy. The Cucumber runtime provides the capability to execute the scenarios in individual files or in all the scenarios in all the files in an individual directory, or recursively all the scenarios in all the files in a directory hierarchy.
+Features and Scenarios are organized into multiple files. These files in turn are organized into a directory hierarchy, rooted by the _features_ directory. The Cucumber runtime provides the capability to execute the scenarios in individual files or in all the scenarios in all the files in an individual directory, or recursively all the scenarios in all the files in a directory hierarchy.
 
 Features and Scenarios of the TCK are organized into a directory structure and naming convention that mirrors the overall structure of the GQL Specification. This enables the execution of scenarios for a subset of the language. e.g. execute all catalog-modifying statement scenarios, or execute all graph creation statement scenarios.
 
@@ -107,10 +122,10 @@ Feature: Create1 - Creating graphs
   Scenario: [1] Create an open graph
 
   @GG02
-  Scenario: [2] Create a closed graph from graph type reference
+  Scenario: [2] Create a closed graph from graph-type reference
 
   @GG02, @GG03
-  Scenario: [3] Create a closed graph from an inline graph type specification
+  Scenario: [3] Create a closed graph from an inline graph-type specification
 
   @GG02, @GG04
   Scenario: [4] Create an closed graph like another graph
@@ -127,19 +142,19 @@ Feature: Create1 - Creating graphs
 ```
 The feature is tagged with _GC04 - Graph Management_ because all the scenarios in this feature validate various forms of the CREATE GRAPH statement, which is part of the optional _Graph Management_ feature. The scenarios in this feature should only be run against GQL Implementation claiming support for this optional feature.
 
-_Scenario 1, Create an open graph_, validates the creation of a graph with an open graph type. Creating a graph with an open graph type is another optional feature (_GG01 - Graph with an open graph type_). Therefore, this scenario is tagged with GG01, and inherits GC04 from its parent Feature.
+_Scenario 1, Create an open graph_, validates the creation of a graph with an open graph-type. Creating a graph with an open graph-type is another optional feature (_GG01 - Graph with an open graph-type_). Therefore, this scenario is tagged with GG01, and inherits GC04 from its parent Feature.
 
-_Scenario 3, Create a closed graph from an inline graph type specification_, is tagged with two tags. _GG02 - Graph with a closed graph type_, and _GG03 - Graph type inline specification_, because it validates a statement that depends on two optional features. It also inherits GC04 from its parent Feature.
+_Scenario 3, Create a closed graph from an inline graph-type specification_, is tagged with two tags. _GG02 - Graph with a closed graph-type_, and _GG03 - Graph type inline specification_, because it validates a statement that depends on two optional features. It also inherits GC04 from its parent Feature.
 
-According to the GQL Specification, a feature FEAT1 may imply another feature FEAT2. This means that if a GQL Implementation claims support for feature FEAT1, it shall also support feature FEAT2. This dependency can be seen in the example. According to the GQL Specification (see 24.7 Implied feature relationships), feature GG01 - Create open graph type, implies GC04 - Graph Management. Thus, the scenario is tagged with both Feature IDs. Note: GC04 is "inherited" from the TCK Feature tag.
+According to the GQL Specification, a feature FEAT1 may imply another feature FEAT2. This means that if a GQL Implementation claims support for feature FEAT1, it shall also support feature FEAT2. This dependency can be seen in the example. According to the GQL Specification (see 24.7 Implied feature relationships), feature GG01 - Create open graph-type, implies GC04 - Graph Management. Thus, the scenario is tagged with both Feature IDs. Note: GC04 is "inherited" from the TCK Feature tag.
 
-When executing scenarios a [_tag expression_](https://cucumber.io/docs/cucumber/api/?lang=java#tag-expressions) can be given to Cucumber runtime, that specifies the subset of scenarios that should be executed. Tag expressions are boolean logic expressions. The following tag expression will execute only scenarios that validate the _Graph Management_ optional feature.
+When executing scenarios a [_tag expression_](https://cucumber.io/docs/cucumber/api/?lang=java#tag-expressions) can be given to Cucumber runtime, that specifies the subset of scenarios that should be executed, based on the tag expression. Tag expressions are boolean logic expressions. The following tag expression will execute only scenarios that validate the _Graph Management_ optional feature.
 
 ```
 @GC04
 ```
 
-While this is a valid tag expression, it does not reflect the dependencies defined by the GQL Specification. If the GQL Implementation supports the creation of graphs with open graph types, but not close graph types this will result in unexpected scenario failure, because both subsets of scenarios will be executed.
+While this is a valid tag expression, it does not reflect the dependencies defined by the GQL Specification. If the GQL Implementation supports the creation of graphs with open graph-types, but not close graph-types this will result in unexpected scenario failure, because both subsets of scenarios will be executed.
 
 The following illustrates a better tag expression because it adheres to the feature dependencies defined by the GQL Specification.
 
@@ -147,102 +162,204 @@ The following illustrates a better tag expression because it adheres to the feat
 @GC04 and @GG01
 ```
 
-When executing scenarios from the TCK, it is up to the consumers of the TCK, to construct tag expressions that reflect the feature dependencies defined by the GQL Specification.
+When executing scenarios from the TCK, it is up to the consumers of the TCK, to construct tag expressions that reflect the feature dependencies defined by the GQL Specification, when executing TCK scenarios.
 
-#### Minimum conformance
+## Minimum conformance
 
-Minimum conformance is defined by 24.2 Minimum conformance, in the GQL Specification. An abbreviated conformance statement is that an implementation meets minimum conformance if it supports the basic property graph data model defined by the specification, all syntax, not associated with an optional feature, one of Graph with open graph type, or Graph with closed graph type, conformance to the Unicode Standard, and support for the following data types: character strings, boolean, signed regular integers, and floats.
+Minimum conformance is defined by 24.2 Minimum conformance, in the GQL Specification. An abbreviated conformance statement is that an implementation meets minimum conformance if it supports the basic property graph data model defined by the specification, all syntax, not associated with an optional feature, one of Graph with open graph-type, or Graph with closed graph-type, conformance to the Unicode Standard, and support for the following data types: character strings, boolean, signed regular integers, and floats.
 
-Question: Is there any minimum conformance that can be verified completely independent of graph type?
+The challenging part of this definition from a TCK standpoint is the requirement that a GQL-implementation must support one of: 1) graph with open graph-type or 2) graph with closed graph-type. It can also support both.
 
-What about conformance to Unicode Standard executing queries similar to the following.
+From a TCK standpoint this means that the TCK must be able to:
 
-```
-    MATCH (n) RETURN "some unicode string" LIMIT 1
-```
+1. Validate an implementation that only supports graphs with open graph-types
+2. Validate an implementation that only supports graphs with closed graph-types
+3. Validate an implementation that supports both
 
-A large portion of the GQL Language is not directly effected by graph typing, yet creating a query to validate compatibility independent of graph type is impossible for graphs with closed graph types. Consider the following example for verifying numeric comparison expressions.
+For the purposes of brevity, this document will use the term _untyped graph_ to refer to graphs with open graph-types and _typed graph_ to refer to graphs with closed graph-types.
 
-```
-  Scenario: [1] Greater than expression
-    Given any graph
-    And having executed:
-      """
-      INSERT (p:Person { age: 30 })
-      """
-    When executing query:
-      """
-      MATCH (p:Person) WHERE p.age > 20 RETURN COUNT(p)
-      """
-    Then the result should be, in any order:
-      | 1 |
-```
-
-This scenario will correctly validate compatibility for graphs with open graph type. For graphs with closed graph type, this scenario will work correctly only if labels, properties and property types used in the queries are compatible with the graph type of the graph.
-
-The following scenario will accurately validate the same behavior on graphs with closed graph type.
+A majority of the TCK scenarios are graph-type agnostic. Consider the following example.
 
 ```
-  Scenario: [1] Greater than expression
-    Given the graph created by executing:
-      """
-      CREATE GRAPH test {(Person :Person {age INT})}
-      """
-    And having executed:
-      """
-      INSERT (p:Person { age: 30 })
-      """
-    When executing query:
-      """
-      MATCH (p:Person) WHERE p.age > 20 RETURN COUNT(p)
-      """
-    Then the result should be, in any order:
-      | 1 |
+Scenario: Find a node with a specific label and property value
+  Given the person-1 graph
+  When executing query:
+  """
+  MATCH (p:Person) WHERE p.age = 25 RETURN p
+  """
+  Then the result should be in any order:
+    | p                                          |
+    | (:Person { name: "Bill Jones", age: 25 })  |
+    | (:Person { name: "Anne Rogers", age: 25 }) |
+```
+This is a positive test, in that it is expected to succeed. It should execute successfully against any untyped graph. When run against a typed graph it can be made to succeed if the labels used in the query conform to the graph-type of the graph.
+
+Here's another example.
+```
+Scenario: Add a node to the graph
+  Given an empty graph
+  When executing query:
+    """
+    INSERT (p:Person {age: 25})
+    """
+  Then the result should be empty
+  And the side effects should be:
+    | +nodes | 1 |
+    | +properties | 1 |
+    | +labels | 1 |
+```
+Again this is a positive test. It is expected to succeed. It should also execute successfully against any untyped graph. And when run against a typed graph with the appropriate graph-type it should succeed.
+
+Neither of these tests are focused on validating type constraints. They are focused on MATCH and INSERT operations, and they should work against both untyped and typed graphs. Obviously there will be scenarios that are focused on type constraints. These tests for the most part will be negative tests and can only run against a typed graph.
+
+Scenarios can be partitioned into the following three categories:
+
+1. Scenarios that don't require a working graph
+2. Scenarios that required a typed working graph
+3. Scenarios that required a working graph, but are graph-type agnostic
+
+### Scenarios that don't require a working graph
+
+This includes scenarios that validate catalog-modifying (with one exception), LET, FOR, FILTER, and RETURN, statements. It also includes a large set of scenarios for validating expressions that can be expressed using LET, FOR, FILTER and RETURN.
+
+For example, for following catalog-modifying statement scenario does not require a working graph.
+```
+Scenario: [1] Create a schema at the root
+  Given an empty catalog
+  When executing query:
+    """
+    CREATE SCHEMA /myschema
+    """
+  Then the result should be empty
+  And the side effects should be:
+    | +schemas | 1 |
+```
+And the following boolean expression scenario does not require a working graph.
+```
+Scenario: [5] Conjunction is commutative on null
+  Given an omitted graph
+  When executing query:
+    """
+    FOR a IN [true, false, null]
+    FOR b IN [true, false, null]
+    FILTER WHERE a IS NULL OR b IS NULL
+    RETURN a, b, ((a AND b) IS null) = ((b AND a) IS NULL) AS result
+    """
+  Then the result should be, in any order:
+    | a     | b     | result |
+    | true  | null  | true   |
+    | false | null  | true   |
+    | null  | true  | true   |
+    | null  | false | true   |
+    | null  | null  | true   |
+  And no side effects
+```
+From a TCK standpoint, these scenarios are straight forward to express, and require no additional support in the TCK Runtime.
+
+### Scenarios that require a typed working graph
+
+These scenarios validate the type constraints functionality defined by the specification. They are almost entirely negative tests, in that they are expected to fail with a _G2000_ exception condition.
+
+The following MATCH scenario validates that an exception is raised when a label is used in a query that is not defined by the graph-type of a given graph.
+```
+Scenario: Match node with invalid label, raises exceptions
+  Given the graph created by executing:
+        """
+    CREATE GRAPH mygraph {
+      (Person :Person {lastname STRING, firstname STRING,joined DATE})
+    }
+    """
+  When executing query:
+    """
+    MATCH (e:Employee) RETURN e
+    """
+  Then an exception condition should be raised: G2000
+```
+Similarly, the following INSERT scenario validates that an exception is raised when a label is used in a query that is not defined by the graph-type of a given graph.
+```
+Scenario: Insert node with invalid label, raises exceptions
+  Given the graph created by executing:
+        """
+    CREATE GRAPH mygraph {
+      (Person :Person {lastname STRING, firstname STRING,joined DATE})
+    }
+    """
+  When executing query:
+    """
+    INSERT (e:Employee {age: 25})
+    """
+  Then an exception condition should be raised: G2000
+```
+From a TCK standpoint, these scenarios are also straight forward to express, and require no additional support in the TCK Runtime.
+
+### Scenarios that required a working graph, but are graph-type agnostic
+
+These scenarios are not validating type constraints, and can be expressed in a graph-type agnostic form. They should succeed trivially against untyped graphs. They should also succeed against typed graphs, given they have the appropriate graph-type. But arranging for this requires support from the TCK Runtime and TCK.
+
+The following example was given earlier, but is repeated here.
+```
+Scenario: Add a node to the graph
+  Given an empty graph
+  When executing query:
+    """
+    INSERT (p:Person {age: 25})
+    """
+  Then the result should be empty
+  And the side effects should be:
+    | +nodes | 1 |
+    | +properties | 1 |
+    | +labels | 1 |
+```
+This scenario should succeed against any untyped graph. It should also succeed against a typed graph with the following graph-type.
+```
+{
+    (Person :Person {age INT})
+}
 ```
 
-According to the GQL Specification minimum conformance requires only that a GQL Implementation support open graph types or closed graph types. It does not have to support both. As a result, without a strategy for expressing compatibility scenarios in a graph type independent way, much of the TCK would have to be duplicated, once for open graph types and again for closed graph types.
+To support graph-type agnostic scenarios the TCK Runtime provides the following mechanism for creating either an untyped graph or typed graph with the appropriate graph-type. The execution of scenarios can be parameterized to indicate whether to execute scenarios against untyped or typed graphs.
 
-The strategy used in the TCK leverages a Cucumber feature called [Scenario Outline](https://cucumber.io/docs/gherkin/reference/#scenario-outline). Scenario Outlines provide the capability of parameterizing steps in a scenario and then executing the Scenario Outline one or more times, with different arguments. Arguments are provided to a Scenario Outline by specifying _Scenarios_, as part of the Scenario Outline. Scenarios is a data element where the data is a table. Columns in the table each represent a different argument value for a parameter. The column head is the name of the parameter. The rows in the table represent the argument values, for each parameter, for each time the Scenario Outline should be instantiated and run as a Scenario.
+#### Sample data
 
-A Scenario Outline can contain more than one Scenarios element. Each Scenarios element can be tagged. Only those Scenarios matching the tag expression will be run through the Scenario Outline.
+Graph-type agnostic scenarios must use graphs created from sample data. Each such graph is specified as a pair of text files in the _tck/data_ hierarchy. The first file, called the _populator_, contains a GQL-program to populate an empty graph with nodes and edges. The second file, called the _creator_, contains a GQL-program to create an empty typed graph. The graph-type should contain the appropriate definitions so that the scenarios intended to be executed against this graph will succeed, without type constraint violations.
 
-The TCK uses the step "Given the graph created by executing:", where the query to create the graph is a Scenario Outline parameter. The argument value can then be either a query that creates a graph with an open type, or a query that creates a graph with a closed type. Each Scenario Outline contains two Scenarioes elements, one tagged with @GG01, that creates a graph with an open type and tagged with @GG02, that creates a graph with a closed type. The closed type graph has a type definition appropriate for the feature being validated. 
-
-The following example illustrates this, by converting the previous example to a Scenario Outline.
-
+The files should be siblings in the directory hierarchy and are associated by file naming convention. The base name of the creator must the base name of the populator appended with the suffix "-creator", as shown in the following example.
 ```
-  Scenario Outline: [1] Greater than expression
-    Given the graph created by executing:
-      """
-      <query>
-      """
-    And having executed:
-      """
-      INSERT (p:Person { age: 30 })
-      """
-    When executing query:
-      """
-      MATCH (p:Person) WHERE p.age > 20 RETURN COUNT(p)
-      """
-    Then the result should be, in any order:
-      | 1 |
+└── tck
+    ├── features
+    └── data
+        └── graphs
+            ├── person.gql
+            ├── person-creator.gql
+            ├── graph-1.gql
+            └── graph-2.gql
+```
+These paired files are used by the TCK Runtime to create a populated untyped graph or a populated typed graph, with the appropriate graph-type.
 
-    @GG01
-    Scenarios: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Scenarios: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {(Person :Person {age INT})} |
+Scenarios create graphs from sample data using the "**Given** the \<graph path\> graph" step as is illustrated in the following example.
+```
+Scenario: Add a node to the graph
+  Given the graphs/person graph
+  When executing query:
+    """
+    INSERT (p:Person {age: 25})
+    """
+  Then the result should be empty
+  And the side effects should be:
+    | +nodes | 1 |
+    | +properties | 1 |
+    | +labels | 1 |
+```
+When running against a GQL-implememtation that supports untyped graphs, the TCK Runtime executes the following program followed by the program contained in the populator file.
+```
+CREATE GRAPH person ANY
 ```
 
-Such a strategy does not obviate the need for scenarios that directly deal with verifying closed graph type features, but applies only to scenarios that are not directly involved with graph types, as the previous example illustrates.
+When running against a GQL-implementation that supports typed graphs, the TCK Runtime executes the program contained in the creator file, followed by the program contained in the populator file.
 
-#### Negative conformance
+## Negative conformance
 
-The TCK does not implement scenarios that attempt to validate negative conformance. e.g. There is no scenario that asserts failure when a statement that creates a graph with an open graph type is executed against an implementation that does not support a graph with an open graph type.
+The TCK does not implement scenarios that attempt to validate negative conformance. e.g. There is no scenario that asserts failure when a statement that creates a graph with an open graph-type is executed against an implementation that does not support a graph with an open graph-type.
 
 ## Syntax
 
@@ -256,7 +373,7 @@ Each scenario is independent, which implies that a scenario never relies on the 
 
 Scenarios are small and focused, validating the smallest possible aspect of the GQL Specification.
 
-With some exceptions, real world graphs and graph types are not used by the TCK. Contrived graphs and graph types are used to focus on a single feature of the GQL Language. For example, a graph type with no property constraints is adequate to verify label set constraints.
+With some exceptions, real world graphs and graph-types are not used by the TCK. Contrived graphs and graph-types are used to focus on a single feature of the GQL Language. For example, a graph-type with no property constraints is adequate to verify label set constraints.
 
 ### Combinatorial feature validation
 
@@ -327,9 +444,9 @@ Sets the home graph of the scenario principal to a reference to a graph created 
 
 **Given** the graph created by executing: \<query\>
 
-**And** after having executed: \<query\>
+**And** having executed the program: \<GQL-program\>
 
-**When** executing query: \<query\>
+**When** executing the program: \<GQL-program\>
 
 **Then** the result should be empty
 
@@ -339,7 +456,7 @@ Sets the home graph of the scenario principal to a reference to a graph created 
 
 **Then** an exception condition should be raised: \<GQLSTATUS\>
 
-**And** these graphs should have equivalent graph types: \<table of graph references\>
+**And** these graphs should have equivalent graph-types: \<table of graph references\>
 
 **And** these graphs should be equivalent: \<table of graph references\>
 
@@ -354,7 +471,7 @@ A GQL query that contains write clauses may have side effects that are persisted
 | schema     | schemas |
 | directory  | directories |
 | graph      | graphs |
-| graph type | graph-types |
+| graph-type | graph-types |
 | node       | nodes |
 | edge       | edges |
 | node type  | node-types |
@@ -409,7 +526,7 @@ USE /system/catalog MATCH (g:Graph) RETURN COUNT(g)
 #### graph-types
 Observability of the _graph-types_ metric:
 
-GQL does not currently provide a query for discovering the number of graph types. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of graph types.
+GQL does not currently provide a query for discovering the number of graph-types. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of graph-types.
 
 ```
 USE /system/catalog MATCH (gt:GraphType) RETURN COUNT(gt)
