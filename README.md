@@ -26,6 +26,18 @@ The primary purpose and goal of the TCK for GQL is to functionally validate that
 
 This narrowly scoped purpose and goal has implications on how the TCK Features and Scenarios are designed and implemented and the kind of sample data that is used in the TCK. These principles of design and development are described below.
 
+## Architecture
+
+Figure 1 illustates the relationship between a GQL-implementation and the TCK Runtime and TCK.
+
+![Diagram](diagrams/images/TCK%20Diagram.jpg)
+
+The GQL-implementation is responsible for implementing the TCK Runtime. The TCK Runtime includes the Cucumber library to assist in the implementation of the runtime. The TCK Runtime also includes the contents of this repository, containing the TCK Features and Scenarios, and associated test data. i.e. the compatibility tests.
+
+The TCK Runtime is considered part of the GQL-implementation. It submits requests to the GQL-server by public or optionally private channels. It might also submit requests to the GQL-server via a GQL-client.
+
+The TCK Runtime provides an implementation-dependent mechanism for executing TCK compatibility tests. It does this with cooperation with and support of the Cucumber library. The mechanism differs somewhat depending on the implementation language.
+
 ## Organization
 
 Cucumber provides two organizing mechanisms. First, Features and Scenarios can be organized into directories and files. Second, a Feature and/or Scenario can be tagged with one or more tags.
