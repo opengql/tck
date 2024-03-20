@@ -13,7 +13,7 @@ An individual compatibility test in Gherkin is known as a _Scenario_, or _Exampl
 
 A complete set of compatibility tests for a given specification is referred to as a Technology Compatibility Kit (TCK).
 
-This repository is designed to be included as a submodule from other repositories. The parent repository is responsible for providing TCK scaffolding and runtime (using the Cucumber library and framework) to execute the TCK against a GQL Implementation.
+This repository is designed to be included as a submodule from other repositories. The parent repository is responsible for providing TCK scaffolding and runtime (using the Cucumber library and framework) to execute the TCK against a GQL-implementation.
 
 [GQL Parser for Go](https://github.com/mburbidg/gql-parser) is an example of a repository that uses the TCK by including this repository as a submodule. That repository uses the Go version of [Cucumber](https://cucumber.io/docs/installation/golang/) as the TCK runtime environment to run the TCK. It also provides other infrastructure such as Makefile, etc. to run the TCK.
 
@@ -22,7 +22,7 @@ Both contributors and consumers of the TCK need to understand the goals and limi
 ### Goals and limitations
 Testing a production database is a monumental task. It requires a variety of testing strategies, including but not limited to: unit testing, smoke testing, integration testing, longevity testing, performance testing, end-to-end testing, disaster-recovery testing etc. The TCK is not designed or intended to address most of these testing needs.
 
-The primary purpose and goal of the TCK for GQL is to functionally validate that a GQL Implementation conforms to the GQL Specification. This is an important, but limited aspect of the overall testing strategy for a production grade GQL Implementation.
+The primary purpose and goal of the TCK for GQL is to functionally validate that a GQL-implementation conforms to the GQL Specification. This is an important, but limited aspect of the overall testing strategy for a production grade GQL-implementation.
 
 This narrowly scoped purpose and goal has implications on how the TCK Features and Scenarios are designed and implemented and the kind of sample data that is used in the TCK. These principles of design and development are described below.
 
@@ -100,13 +100,13 @@ At each level in the hierarchy a judgement is made whether to organize scenarios
 
 ### Tagging
 
-The GQL Specification defines a set of minimal requirements that must be met by a GQL Implementation to claim _Minimum conformance_. It also defines a set of optional features, one or more of which, may be implemented by a GQL Implementation.
+The GQL Specification defines a set of minimal requirements that must be met by a GQL-implementation to claim _Minimum conformance_. It also defines a set of optional features, one or more of which, may be implemented by a GQL-implementation.
 
 The TCK contains scenarios that validate minimum conformance, and scenarios that validate conformance to each of the optional features defined by the specification.
 
 Optional features are generally cross-cutting features that do not easily fit into the hierarchy defined in the previous section.
 
-Implementers need the ability to execute the scenarios that validate minimum conformance and the subset of scenarios that validate the optional features implemented by their GQL Implementation. The TCK uses [Gherkin tags](https://cucumber.io/docs/cucumber/api/?lang=java#tags) to provide this capability.
+Implementers need the ability to execute the scenarios that validate minimum conformance and the subset of scenarios that validate the optional features implemented by their GQL-implementation. The TCK uses [Gherkin tags](https://cucumber.io/docs/cucumber/api/?lang=java#tags) to provide this capability.
 
 Each optional GQL feature is assigned a four character Feature ID in the Specification.These Feature IDs are used to tag Features and/or Scenarios to indicate that a given Feature and/or Scenario validates conformance to the corresponding GQL feature.
 
@@ -140,13 +140,13 @@ Feature: Create1 - Creating graphs
 
   @GG01, @GG02, @GG03, @GG05
 ```
-The feature is tagged with _GC04 - Graph Management_ because all the scenarios in this feature validate various forms of the CREATE GRAPH statement, which is part of the optional _Graph Management_ feature. The scenarios in this feature should only be run against GQL Implementation claiming support for this optional feature.
+The feature is tagged with _GC04 - Graph Management_ because all the scenarios in this feature validate various forms of the CREATE GRAPH statement, which is part of the optional _Graph Management_ feature. The scenarios in this feature should only be run against GQL-implementation claiming support for this optional feature.
 
 _Scenario 1, Create an open graph_, validates the creation of a graph with an open graph-type. Creating a graph with an open graph-type is another optional feature (_GG01 - Graph with an open graph-type_). Therefore, this scenario is tagged with GG01, and inherits GC04 from its parent Feature.
 
 _Scenario 3, Create a closed graph from an inline graph-type specification_, is tagged with two tags. _GG02 - Graph with a closed graph-type_, and _GG03 - Graph type inline specification_, because it validates a statement that depends on two optional features. It also inherits GC04 from its parent Feature.
 
-According to the GQL Specification, a feature FEAT1 may imply another feature FEAT2. This means that if a GQL Implementation claims support for feature FEAT1, it shall also support feature FEAT2. This dependency can be seen in the example. According to the GQL Specification (see 24.7 Implied feature relationships), feature GG01 - Create open graph-type, implies GC04 - Graph Management. Thus, the scenario is tagged with both Feature IDs. Note: GC04 is "inherited" from the TCK Feature tag.
+According to the GQL Specification, a feature FEAT1 may imply another feature FEAT2. This means that if a GQL-implementation claims support for feature FEAT1, it shall also support feature FEAT2. This dependency can be seen in the example. According to the GQL Specification (see 24.7 Implied feature relationships), feature GG01 - Create open graph-type, implies GC04 - Graph Management. Thus, the scenario is tagged with both Feature IDs. Note: GC04 is "inherited" from the TCK Feature tag.
 
 When executing scenarios a [_tag expression_](https://cucumber.io/docs/cucumber/api/?lang=java#tag-expressions) can be given to Cucumber runtime, that specifies the subset of scenarios that should be executed, based on the tag expression. Tag expressions are boolean logic expressions. The following tag expression will execute only scenarios that validate the _Graph Management_ optional feature.
 
@@ -154,7 +154,7 @@ When executing scenarios a [_tag expression_](https://cucumber.io/docs/cucumber/
 @GC04
 ```
 
-While this is a valid tag expression, it does not reflect the dependencies defined by the GQL Specification. If the GQL Implementation supports the creation of graphs with open graph-types, but not close graph-types this will result in unexpected scenario failure, because both subsets of scenarios will be executed.
+While this is a valid tag expression, it does not reflect the dependencies defined by the GQL Specification. If the GQL-implementation supports the creation of graphs with open graph-types, but not close graph-types this will result in unexpected scenario failure, because both subsets of scenarios will be executed.
 
 The following illustrates a better tag expression because it adheres to the feature dependencies defined by the GQL Specification.
 
@@ -220,7 +220,7 @@ Scenarios can be partitioned into the following three categories:
 
 ### Scenarios that don't require a working graph
 
-This includes scenarios that validate catalog-modifying (with one exception), LET, FOR, FILTER, and RETURN, statements. It also includes a large set of scenarios for validating expressions that can be expressed using LET, FOR, FILTER and RETURN.
+This includes scenarios that validate catalog-modifying (with one exception), LET, FOR, FILTER, and RETURN, statements. It also includes a large set of scenarios for validating expressions that can be expressed using LET, FOR, FILTER and RETURN. This is because none of these statements require working graphs.
 
 For example, for following catalog-modifying statement scenario does not require a working graph.
 ```
@@ -262,6 +262,7 @@ These scenarios validate the type constraints functionality defined by the speci
 
 The following MATCH scenario validates that an exception is raised when a label is used in a query that is not defined by the graph-type of a given graph.
 ```
+@GG02
 Scenario: Match node with invalid label, raises exceptions
   Given the graph created by executing:
         """
@@ -275,8 +276,9 @@ Scenario: Match node with invalid label, raises exceptions
     """
   Then an exception condition should be raised: G2000
 ```
-Similarly, the following INSERT scenario validates that an exception is raised when a label is used in a query that is not defined by the graph-type of a given graph.
+Similarly, the following INSERT scenario validates that an exception is raised when a label is used in a query that is not defined by the graph-type of a given graph. Note that these scenarios are tagged with the Feature ID for graphs with closed graph types.
 ```
+@GG02
 Scenario: Insert node with invalid label, raises exceptions
   Given the graph created by executing:
         """
@@ -319,8 +321,6 @@ This scenario should succeed against any untyped graph. It should also succeed a
 
 To support graph-type agnostic scenarios the TCK Runtime provides the following mechanism for creating either an untyped graph or typed graph with the appropriate graph-type. The execution of scenarios can be parameterized to indicate whether to execute scenarios against untyped or typed graphs.
 
-#### Sample data
-
 Graph-type agnostic scenarios must use graphs created from sample data. Each such graph is specified as a pair of text files in the _tck/data_ hierarchy. The first file, called the _populator_, contains a GQL-program to populate an empty graph with nodes and edges. The second file, called the _creator_, contains a GQL-program to create an empty typed graph. The graph-type should contain the appropriate definitions so that the scenarios intended to be executed against this graph will succeed, without type constraint violations.
 
 The files should be siblings in the directory hierarchy and are associated by file naming convention. The base name of the creator must the base name of the populator appended with the suffix "-creator", as shown in the following example.
@@ -356,6 +356,8 @@ CREATE GRAPH person ANY
 ```
 
 When running against a GQL-implementation that supports typed graphs, the TCK Runtime executes the program contained in the creator file, followed by the program contained in the populator file.
+
+This mechanism provides the required capability to execute graph-type agnostic scenarios against both untyped and typed graphs, depending on what the GQL-implementation supports.
 
 ## Negative conformance
 
@@ -492,7 +494,7 @@ Ultimately it is up to the TCK scaffolding and runtime to interact with the impl
 
 Side effects that are only temporarily in effect during the execution of a query are not measured in these metrics.
 
-For example, the query CREATE (n) DELETE n, which creates a node only to immediately delete it, may be correctly implemented as a no-op by a GQL Implementation, and a TCK scenario featuring it should not specify any side effects.
+For example, the query CREATE (n) DELETE n, which creates a node only to immediately delete it, may be correctly implemented as a no-op by a GQL-implementation, and a TCK scenario featuring it should not specify any side effects.
 
 Concretely, observability of each metric is defined by one GQL query per metric, where possible, which will present the metric as the difference in returned records from executing the query before and after the query Q under test. These defining queries are listed as follows.
 
