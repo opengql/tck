@@ -51,11 +51,8 @@ Feature: Boolean4 - NOT logical operations
       | true | false | null |
     And no side effects
 
-  Scenario Outline: [3] NOT and false
-    Given the graph created by executing:
-    """
-    <create-query>
-    """
+  Scenario: [3] NOT and false
+    Given the empty-person graph
     And having executed:
       """
       CREATE ({name: 'a'})
@@ -70,16 +67,6 @@ Feature: Boolean4 - NOT logical operations
       | n             |
       | ({name: 'a'}) |
     And no side effects
-
-    @GG01
-    Examples:
-      | create-query |
-      | CREATE test ANY |
-
-    @GG02
-    Examples:
-      | create-query |
-      | CREATE GRAPH test {(Person :Person {name STRING})} |
 
   Scenario Outline: [4] Fail when using NOT on a non-boolean literal
     When executing query:
