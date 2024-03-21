@@ -28,13 +28,10 @@
 
 #encoding: utf-8
 
+@base
 Feature: Boolean1 - And logical operations
 
-  Scenario Outline: [1] Conjunction of two truth values
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [1] Conjunction of two truth values
     When executing query:
       """
       RETURN true AND true AS tt,
@@ -52,21 +49,7 @@ Feature: Boolean1 - And logical operations
       | true | false | null | false | false | false | null | false | null |
     And no side effects
 
-    @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
-  Scenario Outline: [2] Conjunction of three truth values
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [2] Conjunction of three truth values
     When executing query:
       """
       RETURN true AND true AND true AS ttt,
@@ -102,21 +85,7 @@ Feature: Boolean1 - And logical operations
       | true | false | null | false | false | false | null | false | null | false | false | false | false | false | false | false | false | false | null | false | null | false | false | false | null | false | null |
     And no side effects
 
-    @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
-  Scenario Outline: [3] Conjunction of many truth values
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [3] Conjunction of many truth values
     When executing query:
       """
       RETURN true AND true AND true AND true AND true AND true AND true AND true AND true AND true AND true AS t,
@@ -137,21 +106,7 @@ Feature: Boolean1 - And logical operations
       | true | false | null | false | false | false | null | null | false | false | false | false |
     And no side effects
 
-    @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
-  Scenario Outline: [4] Conjunction is commutative on non-null
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [4] Conjunction is commutative on non-null
     When executing query:
       """
       FOR a IN [true, false]
@@ -166,21 +121,7 @@ Feature: Boolean1 - And logical operations
       | false | false | true   |
     And no side effects
 
-    @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
-  Scenario Outline: [5] Conjunction is commutative on null
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [5] Conjunction is commutative on null
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -197,21 +138,7 @@ Feature: Boolean1 - And logical operations
       | null  | null  | true   |
     And no side effects
 
-  @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-  @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
-  Scenario Outline: [6] Conjunction is associative on non-null
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [6] Conjunction is associative on non-null
     When executing query:
       """
       FOR a IN [true, false]
@@ -231,21 +158,7 @@ Feature: Boolean1 - And logical operations
       | false | false | false | true   |
     And no side effects
 
-    @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
-  Scenario Outline: [7] Conjunction is associative on null
-    Given the graph created using:
-      """
-      <query>
-      """
+  Scenario: [7] Conjunction is associative on null
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -277,77 +190,35 @@ Feature: Boolean1 - And logical operations
       | null  | null  | null  | true   |
     And no side effects
 
-    @GG01
-    Examples: Graph with open graph type
-      | query |
-      | CREATE GRAPH test ANY |
-
-    @GG02
-    Examples: Graph with closed graph type
-      | query |
-      | CREATE GRAPH test {()} |
-
   Scenario Outline: [8] Fail on conjunction of at least one non-booleans
-    Given the graph created using:
-      """
-      <query>
-      """
     When executing query:
       """
       RETURN <a> AND <b>
       """
-    Then Then an exception condition should be raised: 42000
+    Then an exception condition should be raised: 42000
 
-    @GG01
     Examples:
-      | query | a       | b       |
-      | CREATE GRAPH test ANY | 123     | true    |
-      | CREATE GRAPH test ANY | 123.4   | false   |
-      | CREATE GRAPH test ANY | 123.4   | null    |
-      | CREATE GRAPH test ANY | 'foo'   | true    |
-      | CREATE GRAPH test ANY | []      | false   |
-      | CREATE GRAPH test ANY | [true]  | false   |
-      | CREATE GRAPH test ANY | [null]  | null    |
-      | CREATE GRAPH test ANY | {}      | true    |
-      | CREATE GRAPH test ANY | {x: []} | true    |
-      | CREATE GRAPH test ANY | false   | 123     |
-      | CREATE GRAPH test ANY | true    | 123.4   |
-      | CREATE GRAPH test ANY | false   | 'foo'   |
-      | CREATE GRAPH test ANY | null    | 'foo'   |
-      | CREATE GRAPH test ANY | true    | []      |
-      | CREATE GRAPH test ANY | true    | [false] |
-      | CREATE GRAPH test ANY | null    | [null]  |
-      | CREATE GRAPH test ANY | false   | {}      |
-      | CREATE GRAPH test ANY | false   | {x: []} |
-      | CREATE GRAPH test ANY | 123     | 'foo'   |
-      | CREATE GRAPH test ANY | 123.4   | 123.4   |
-      | CREATE GRAPH test ANY | 'foo'   | {x: []} |
-      | CREATE GRAPH test ANY | [true]  | [true]  |
-      | CREATE GRAPH test ANY | {x: []} | [123]   |
-
-    @GG02
-    Examples:
-      | query | a       | b       |
-      | CREATE GRAPH test {()} | 123     | true    |
-      | CREATE GRAPH test {()} | 123.4   | false   |
-      | CREATE GRAPH test {()} | 123.4   | null    |
-      | CREATE GRAPH test {()} | 'foo'   | true    |
-      | CREATE GRAPH test {()} | []      | false   |
-      | CREATE GRAPH test {()} | [true]  | false   |
-      | CREATE GRAPH test {()} | [null]  | null    |
-      | CREATE GRAPH test {()} | {}      | true    |
-      | CREATE GRAPH test {()} | {x: []} | true    |
-      | CREATE GRAPH test {()} | false   | 123     |
-      | CREATE GRAPH test {()} | true    | 123.4   |
-      | CREATE GRAPH test {()} | false   | 'foo'   |
-      | CREATE GRAPH test {()} | null    | 'foo'   |
-      | CREATE GRAPH test {()} | true    | []      |
-      | CREATE GRAPH test {()} | true    | [false] |
-      | CREATE GRAPH test {()} | null    | [null]  |
-      | CREATE GRAPH test {()} | false   | {}      |
-      | CREATE GRAPH test {()} | false   | {x: []} |
-      | CREATE GRAPH test {()} | 123     | 'foo'   |
-      | CREATE GRAPH test {()} | 123.4   | 123.4   |
-      | CREATE GRAPH test {()} | 'foo'   | {x: []} |
-      | CREATE GRAPH test {()} | [true]  | [true]  |
-      | CREATE GRAPH test {()} | {x: []} | [123]   |
+      | a       | b       |
+      | 123     | true    |
+      | 123.4   | false   |
+      | 123.4   | null    |
+      | 'foo'   | true    |
+      | []      | false   |
+      | [true]  | false   |
+      | [null]  | null    |
+      | {}      | true    |
+      | {x: []} | true    |
+      | false   | 123     |
+      | true    | 123.4   |
+      | false   | 'foo'   |
+      | null    | 'foo'   |
+      | true    | []      |
+      | true    | [false] |
+      | null    | [null]  |
+      | false   | {}      |
+      | false   | {x: []} |
+      | 123     | 'foo'   |
+      | 123.4   | 123.4   |
+      | 'foo'   | {x: []} |
+      | [true]  | [true]  |
+      | {x: []} | [123]   |

@@ -430,7 +430,7 @@ This is a work in progress!
 
 **Given** an omitted graph
 
-Sets the home graph of the scenario principal to _omitted_.
+Sets the home graph of the scenario principal to _omitted_. This is optional. For each scenario the user's home graph is set to omitted.
 
 **Given** an empty graph
 
@@ -579,3 +579,13 @@ Todo
 Observability of the _label-sets_ metric:
 
 Todo
+
+## Scenario execution
+
+There are three phases to the execution of a scenario. The initialization, execution, and cleanup.
+
+During the initialization phase, the TCK Runtime is obligated to set the home graph of the principal used to execute the scenario to _omitted_.
+
+During the execution phase, the scenario is executed. The scenario may create GQL-primary objects during its execution. The TCK Runtime must track each primary object created during the execution of a scenario. 
+
+During the cleanup phase, the TCK Runtime must delete or drop and primary object created during the execution of the scenario.
