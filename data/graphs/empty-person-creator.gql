@@ -1,3 +1,4 @@
 CREATE GRAPH mygraph {
-(Person :Person {name STRING})
+    (Person :Person {name STRING, age INT}),
+    (Person)-[LABEL Knows ::= KNOWS]->(Person)
 }
