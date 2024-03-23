@@ -32,6 +32,7 @@
 Feature: Boolean5 - Interop of logical operations
 
   Scenario: [1] Disjunction is distributive over conjunction on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -52,6 +53,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [2] Disjunction is distributive over conjunction on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -84,6 +86,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [3] Conjunction is distributive over disjunction on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -104,6 +107,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [4] Conjunction is distributive over disjunction on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -136,6 +140,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [5] Conjunction is distributive over exclusive disjunction on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -156,6 +161,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [6] Conjunction is not distributive over exclusive disjunction on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -188,6 +194,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [7] De Morgan's law on non-null: the negation of a disjunction is the conjunction of the negations
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -203,6 +210,7 @@ Feature: Boolean5 - Interop of logical operations
     And no side effects
 
   Scenario: [8] De Morgan's law on non-null: the negation of a conjunction is the disjunction of the negations
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]

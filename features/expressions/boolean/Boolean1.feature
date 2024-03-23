@@ -32,6 +32,7 @@
 Feature: Boolean1 - And logical operations
 
   Scenario: [1] Conjunction of two truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN true AND true AS tt,
@@ -50,6 +51,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario: [2] Conjunction of three truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN true AND true AND true AS ttt,
@@ -86,6 +88,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario: [3] Conjunction of many truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN true AND true AND true AND true AND true AND true AND true AND true AND true AND true AND true AS t,
@@ -107,6 +110,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario: [4] Conjunction is commutative on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -122,6 +126,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario: [5] Conjunction is commutative on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -139,6 +144,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario: [6] Conjunction is associative on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -159,6 +165,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario: [7] Conjunction is associative on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -191,6 +198,7 @@ Feature: Boolean1 - And logical operations
     And no side effects
 
   Scenario Outline: [8] Fail on conjunction of at least one non-booleans
+    Given the omitted graph
     When executing query:
       """
       RETURN <a> AND <b>

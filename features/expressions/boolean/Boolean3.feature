@@ -32,6 +32,7 @@
 Feature: Boolean3 - XOR logical operations
 
   Scenario: [1] Exclusive disjunction of two truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN true XOR true AS tt,
@@ -50,6 +51,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario: [2] Exclusive disjunction of three truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN true XOR true XOR true AS ttt,
@@ -86,6 +88,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario: [3] Exclusive disjunction of many truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN true XOR true XOR true XOR true XOR true XOR true XOR true XOR true XOR true XOR true XOR true AS t,
@@ -107,6 +110,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario: [4] Exclusive disjunction is commutative on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -122,6 +126,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario: [5] Exclusive disjunction is commutative on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -139,6 +144,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario: [6] Exclusive disjunction is associative on non-null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false]
@@ -159,6 +165,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario: [7] Exclusive disjunction is associative on null
+    Given the omitted graph
     When executing query:
       """
       FOR a IN [true, false, null]
@@ -191,6 +198,7 @@ Feature: Boolean3 - XOR logical operations
     And no side effects
 
   Scenario Outline: [8] Fail on exclusive disjunction of at least one non-booleans
+    Given the omitted graph
     When executing query:
       """
       RETURN <a> XOR <b>

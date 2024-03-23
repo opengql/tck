@@ -32,6 +32,7 @@
 Feature: Boolean4 - NOT logical operations
 
   Scenario: [1] Logical negation of truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN NOT true AS nt, NOT false AS nf, NOT null AS nn
@@ -42,6 +43,7 @@ Feature: Boolean4 - NOT logical operations
     And no side effects
 
   Scenario: [2] Double logical negation of truth values
+    Given the omitted graph
     When executing query:
       """
       RETURN NOT (NOT true) AS nnt, NOT (NOT false) AS nnf, NOT (NOT null) AS nnn
@@ -52,6 +54,7 @@ Feature: Boolean4 - NOT logical operations
     And no side effects
 
   Scenario: [3] NOT and false
+    Given the omitted graph
     Given the empty-person graph
     And having executed:
       """
@@ -69,6 +72,7 @@ Feature: Boolean4 - NOT logical operations
     And no side effects
 
   Scenario Outline: [4] Fail when using NOT on a non-boolean literal
+    Given the omitted graph
     When executing query:
       """
       RETURN NOT <literal>

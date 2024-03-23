@@ -428,9 +428,9 @@ This is a work in progress!
 
 **Given** the \<catalog name\> catalog
 
-**Given** an omitted graph
+**Given** the omitted graph
 
-Sets the home graph of the scenario principal to _omitted_. This is optional. For each scenario the user's home graph is set to omitted.
+Sets the home graph of the scenario principal to _omitted_.
 
 **Given** an empty graph
 
@@ -444,7 +444,7 @@ Sets the home graph of the scenario principal to a reference to any graph.
 
 Sets the home graph of the scenario principal to a reference to a graph created from \<graph name\>.
 
-**Given** the graph created by executing: \<query\>
+**Given** the graph created by executing the program: \<query\>
 
 **And** having executed the program: \<GQL-program\>
 
