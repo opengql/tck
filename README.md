@@ -467,7 +467,6 @@ A GQL query that contains write clauses may have side effects that are persisted
 | Object     | Denoted by  |
 |------------|-------------|
 | schema     | schemas |
-| directory  | directories |
 | graph      | graphs |
 | graph-type | graph-types |
 | node       | nodes |
