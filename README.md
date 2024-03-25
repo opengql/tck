@@ -424,10 +424,6 @@ This is a work in progress!
 
 **Given** an empty catalog
 
-**Given** any catalog
-
-**Given** the \<catalog name\> catalog
-
 **Given** the omitted graph
 
 Sets the home graph of the scenario principal to _omitted_.
@@ -505,15 +501,6 @@ GQL does not currently provide a query for discovering the number of schemas. Ho
 
 ```
 USE /system/catalog MATCH (s:Schema) RETURN COUNT(n)
-```
-
-#### directories
-Observability of the _directories_ metric:
-
-GQL does not currently provide a query for discovering the number of directories. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of directories.
-
-```
-USE /system/catalog MATCH (d:Directory) RETURN COUNT(d)
 ```
 
 #### graphs

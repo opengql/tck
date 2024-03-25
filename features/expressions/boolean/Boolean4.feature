@@ -58,7 +58,7 @@ Feature: Boolean4 - NOT logical operations
     Given the empty-person graph
     And having executed:
       """
-      CREATE ({name: 'a'})
+      INSERT ({name: 'a'})
       """
     When executing query:
       """
