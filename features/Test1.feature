@@ -62,3 +62,31 @@ Feature: Test1 - Integer expressions
     And the side effects should be:
       | +schemas | 0 |
       | +directories | 0 |
+
+  Scenario: [5] Raise error condition creating a schema whose name identifies a graph
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE SCHEMA /foo
+      CREATE GRAPH /foo/mygraph ANY
+      """
+    When executing query:
+      """
+      CREATE SCHEMA /foo/mygraph
+      """
+    Then an exception condition should be raised: 42000
+
+  Scenario: [6] Raise error condition creating a schema whose name identifies a graph type
+    Given an empty catalog
+    And having executed:
+      """
+      CREATE SCHEMA /foo
+      CREATE GRAPH TYPE /foo/mygraphtype {
+        (Person :Person {lastname STRING, firstname STRING,joined DATE})
+      }
+      """
+    When executing query:
+      """
+      CREATE SCHEMA /foo/mygraphtype
+      """
+    Then an exception condition should be raised: 42000
