@@ -10,4 +10,4 @@ Feature: Test1 - Integer expressions
       """
       CREATE SCHEMA /foo
       """
-    Then an exception condition should be raised: 42001
+    Then an exception condition should be raised: 42000
