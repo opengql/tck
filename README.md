@@ -3,7 +3,7 @@
 ## Introduction
 A Language-independent Technology Compatibility Kit (TCK) for GQL.
 
-The TCK for GQL, hereafter referred to as the TCK, is derived from the [openCypher TCK](https://opencypher.org/resources/) since the two languages share many language features. Some text in this document was taken from the [openCypher README](https://github.com/opencypher/openCypher/blob/master/tck/README.adoc.
+The TCK for GQL, hereafter referred to as the TCK, is derived from the [openCypher TCK](https://opencypher.org/resources/) since the two languages share many language features. Some text in this document was taken from the [openCypher README](https://github.com/opencypher/openCypher/blob/master/tck/README.adoc. In addition, source files and components contained in this TCK are modified from the originals in the openCypher TCK. See [NOTICE](NOTICE.md) for details.
 
 The TCK is built using [Cucumber](https://cucumber.io/), open source technology for specifying and executing a set of compatibility tests.
 
