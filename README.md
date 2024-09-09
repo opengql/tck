@@ -464,18 +464,20 @@ Sets the home graph of the scenario principal to a reference to a graph created 
 
 A GQL query that contains write clauses may have side effects that are persisted in the graph. A side effect is either the addition (denoted by +) or the removal (-) of one of the following objects:
 
-| Object     | Denoted by  |
-|------------|-------------|
-| schema     | schemas |
-| graph      | graphs |
-| graph-type | graph-types |
-| node       | nodes |
-| edge       | edges |
-| node type  | node-types |
-| edge type  | edge-types |
-| property   | properties |
-| label      | labels |
-| label set  | label-sets |
+| Object                  | Denoted by  |
+|-------------------------|-------------|
+| schema                  | schemas |
+| graph                   | graphs |
+| node                    | nodes |
+| edge                    | edges |
+| property                | properties |
+| label                   | labels |
+| label set               | label-sets |
+| graph type              | graph-types |
+| node type               | node-types |
+| edge type               | edge-types |
+| node type key label set | node-type-keys |
+| edge type key label set | edge-type-keys |
 
 An unspecified quantity implies that it is expected to be zero. If the side effects step reads And no side effects, this implies that all quantities are expected to be zero.
 
@@ -511,15 +513,6 @@ GQL does not currently provide a query for discovering the number of graphs. How
 USE /system/catalog MATCH (g:Graph) RETURN COUNT(g)
 ```
 
-#### graph-types
-Observability of the _graph-types_ metric:
-
-GQL does not currently provide a query for discovering the number of graph-types. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of graph-types.
-
-```
-USE /system/catalog MATCH (gt:GraphType) RETURN COUNT(gt)
-```
-
 #### nodes
 Observatibility of the _nodes_ metric:
 ```
@@ -531,6 +524,25 @@ Observability of the _edges_ metric:
 
 ```
 MATCH ()-[e]->() RETURN COUNT(e)
+```
+
+#### properties
+Observability of the _properties_ metric:
+
+Todo
+
+#### labels
+Observability of the _labels_ metric:
+
+Todo
+
+#### graph-types
+Observability of the _graph-types_ metric:
+
+GQL does not currently provide a query for discovering the number of graph-types. However, many implementations will represent the Catalog as a system graph. A GQL query such as the following can return the number of graph-types.
+
+```
+USE /system/catalog MATCH (gt:GraphType) RETURN COUNT(gt)
 ```
 
 #### node-types
@@ -551,18 +563,13 @@ GQL does not currently provide a query for discovering the number of edge types.
 USE /system/catalog MATCH (t:EdgeType) RETURN COUNT(t)
 ```
 
-#### properties
-Observability of the _properties_ metric:
+#### node-type-keys
+Observability of the _node-type-keys_ metric:
 
 Todo
 
-#### labels
-Observability of the _labels_ metric:
-
-Todo
-
-#### label-sets
-Observability of the _label-sets_ metric:
+#### edge-type-keys
+Observability of the _edge-type-keys_ metric:
 
 Todo
 
