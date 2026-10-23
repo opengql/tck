@@ -73,7 +73,7 @@ Feature: Create1 - Creating single node types with optional key label sets
     When executing the program:
       """
       CREATE GRAPH TYPE mygraphtype {
-        (p:Person&Student&Happy {name STRING NOT NULL, age INT, studentID STRING})
+        (p:Person {name STRING, name INT})
       }
       """
     Then an exception condition should be raised: 42000

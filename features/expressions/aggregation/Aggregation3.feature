@@ -44,7 +44,7 @@ Feature: Aggregation3 - Sum
       RETURN p.name, sum(p.age)
       """
     Then the result should be, in any order:
-      | n.name | sum(n.num) |
+      | p.name | sum(p.age) |
       | 'a'    | 75         |
     And no side effects
 
